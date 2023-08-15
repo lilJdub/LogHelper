@@ -1,18 +1,20 @@
-# This is a sample Python Project for csv merging tool
-import os
-import csv
-import pandas as pd
-
-
 def merge_df(fn):
     # 看一下是否有final_log
-    if os.path.exists("final_log.xlsx"):
+    if os.path.exists("final_log.csv"):
         # 有的話把新df加到後面
-        print("second!")
+        fir = pd.read_csv("final_log.csv")
+        sec = pd.read_csv(fn)
+        merged = pd.concat([sec, fir],axis=1)
+        merged.to_csv("final_log.csv")
     else:
         # 沒有的話把新df做為表頭
         df = pd.read_csv(fn)
-        df.to_csv("final_log.xlsx")
+        visualize()
+        df.to_csv("final_log.csv")
+
+
+def visualize():
+    return 0
 
 
 if __name__ == '__main__':
@@ -34,4 +36,3 @@ if __name__ == '__main__':
             file_path = os.path.join(folder_path, file_name)
             print(file_path)
             merge_df(file_name)
-

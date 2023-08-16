@@ -1,26 +1,35 @@
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
 def merge_df(fn):
     # 看一下是否有final_log
     if os.path.exists("final_log.csv"):
         # 有的話把新df加到後面
         fir = pd.read_csv("final_log.csv")
+        #  要過格式處理
         sec = pd.read_csv(fn)
         merged = pd.concat([sec, fir],axis=1)
+        merged = merged.loc[:, ~merged.columns.str.contains('Unnamed: 0')]
         merged.to_csv("final_log.csv")
     else:
         # 沒有的話把新df做為表頭
         df = pd.read_csv(fn)
-        visualize()
+        # visualize()
         df.to_csv("final_log.csv")
 
 
-def visualize():
-    return 0
+def visualize_hw_info(df):
+    names = ['Physical Memory Used [MB]', "Core VIDs (avg) [V]"]
+    for name in names:
+        plt.subplot()
+        plt.title(name)
+        plt.plot(df[name])
+        plt.show()
 
 
 if __name__ == '__main__':
-    import os
-    import pandas as pd
-
     # 取得目前執行的Python檔案的路徑
     current_file_path = os.path.abspath(__file__)
 
@@ -29,10 +38,22 @@ if __name__ == '__main__':
 
     # 遍歷資料夾中的檔案
     for file_name in os.listdir(folder_path):
-        print(file_name)
         # 檢查檔案是否為CSV檔案
         if file_name.lower().endswith('.csv'):
+            """
             # 構建完整的檔案路徑
             file_path = os.path.join(folder_path, file_name)
-            print(file_path)
+            cdf = pd.read_csv(file_name)
+            visualize(cdf)
             merge_df(file_name)
+            """
+            # 檔案分流
+            cdf = pd.read_csv(file_name)
+            match file_name:
+                case "furmark-gpu-monitoring.csv":
+                    print("furmark")
+                case "hwinfo.CSV":
+                    print("hwinfo")
+                    visualize_hw_info(cdf)
+
+

@@ -10,7 +10,7 @@ def merge_df(fn):
         fir = pd.read_csv("final_log.csv")
         #  要過格式處理
         sec = pd.read_csv(fn)
-        merged = pd.concat([sec, fir],axis=1)
+        merged = pd.concat([sec, fir], axis=1)
         merged = merged.loc[:, ~merged.columns.str.contains('Unnamed: 0')]
         merged.to_csv("final_log.csv")
     else:
@@ -25,8 +25,18 @@ def visualize_hw_info(df):
     for name in names:
         plt.subplot()
         plt.title(name)
-        plt.plot(df[name])
+        plt.plot(df[name][:-2])
+        # set ticks
+        y_ticks = plt.yticks()[0]
+        selected_ticks = y_ticks[::len(y_ticks) // 4]
+        plt.yticks(selected_ticks)
         plt.show()
+
+
+def visualize_furmark():
+    names = []
+    for name in names:
+        print(name)
 
 
 if __name__ == '__main__':
@@ -55,5 +65,3 @@ if __name__ == '__main__':
                 case "hwinfo.CSV":
                     print("hwinfo")
                     visualize_hw_info(cdf)
-
-

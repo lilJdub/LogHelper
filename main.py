@@ -33,10 +33,28 @@ def visualize_hw_info(df):
         plt.show()
 
 
-def visualize_furmark():
-    names = []
+def visualize_furmark(df):
+    g_df=df.groupby("Renderer")
+    names = ['core_temp_fahrenheit']
     for name in names:
-        print(name)
+        plt.subplot()
+        plt.title(name)
+        for group_name, group_data in g_df:
+            plt.plot(group_data[name], label=group_name)
+        plt.xlabel('Index')
+        plt.ylabel(name)
+        plt.legend()
+    plt.show()
+"""
+    names = []
+    for name in names: 
+        plt.subplot()
+        plt.title(name)
+        y_ticks = plt.yticks()[0]
+        selected_ticks = y_ticks[::len(y_ticks) // 4]
+        plt.yticks(selected_ticks)
+        plt.show()
+    """
 
 
 if __name__ == '__main__':
@@ -62,6 +80,7 @@ if __name__ == '__main__':
             match file_name:
                 case "furmark-gpu-monitoring.csv":
                     print("furmark")
+                    visualize_furmark(cdf)
                 case "hwinfo.CSV":
                     print("hwinfo")
                     visualize_hw_info(cdf)
